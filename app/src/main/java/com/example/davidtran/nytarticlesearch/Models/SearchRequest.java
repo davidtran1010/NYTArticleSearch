@@ -20,8 +20,19 @@ public class SearchRequest implements Parcelable {
 
     private String Query = "";
     private String BeginDate = "";
-    private String Sort = "";
+    private String Sort = "newest";
     private String Desk = "";
+    private int Page = 0;
+
+    public int getPage() {
+        return Page;
+    }
+
+    public void setPage(int page) {
+        Page = page;
+    }
+
+
 
     public String getQuery() {
         return Query;
@@ -57,6 +68,7 @@ public class SearchRequest implements Parcelable {
 
     public Map<String, String> toQueryMap() {
         Map<String, String> options = new HashMap<>();
+        options.put("Page",""+Page);
         if (Query != "") {
             options.put("q", Query);
         }
@@ -73,6 +85,9 @@ public class SearchRequest implements Parcelable {
         return options;
     }
 
+    public SearchRequest() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -81,16 +96,21 @@ public class SearchRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.Query);
-    }
-
-    public SearchRequest() {
+        dest.writeString(this.BeginDate);
+        dest.writeString(this.Sort);
+        dest.writeString(this.Desk);
+        dest.writeInt(this.Page);
     }
 
     protected SearchRequest(Parcel in) {
         this.Query = in.readString();
+        this.BeginDate = in.readString();
+        this.Sort = in.readString();
+        this.Desk = in.readString();
+        this.Page = in.readInt();
     }
 
-    public static final Parcelable.Creator<SearchRequest> CREATOR = new Parcelable.Creator<SearchRequest>() {
+    public static final Creator<SearchRequest> CREATOR = new Creator<SearchRequest>() {
         @Override
         public SearchRequest createFromParcel(Parcel source) {
             return new SearchRequest(source);

@@ -4,6 +4,7 @@ package com.example.davidtran.nytarticlesearch.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.davidtran.nytarticlesearch.Adapters.ArticleAdapter;
 import com.example.davidtran.nytarticlesearch.Models.Article;
@@ -135,11 +137,20 @@ public class ArticleFragment extends Fragment {
                     for (Article a : articleList) {
                         Log.d("My log: Article ", a.getSnipet());
                     }
+                    if(articleList.size()>0) {
+                        setUpAdapter(articleList);
+                    }
+                    else{
+                        Toast.makeText(getActivity(),"Your searching not found! \nAll article will be reloaded",Toast.LENGTH_SHORT);
+                        reFeshFragment();
+                    }
                 }
                 catch (Exception e){
                     articleList = new ArrayList<Article>();
+                    Toast.makeText(getActivity(),"Your searching not found! \nAll article will be reloaded",Toast.LENGTH_LONG);
+                    reFeshFragment();
                 }
-                setUpAdapter(articleList);
+
                 loadingBar.setVisibility(View.GONE);
 
 
@@ -151,6 +162,13 @@ public class ArticleFragment extends Fragment {
             }
         });
 
+    }
+    private  void reFeshFragment(){
+        loadingBar.setVisibility(View.VISIBLE);
+        Fragment fragment = new ArticleFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frag_container, fragment).addToBackStack(null).commit();
+        loadingBar.setVisibility(View.GONE);
     }
 
 

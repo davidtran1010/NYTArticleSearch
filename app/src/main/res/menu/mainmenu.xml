@@ -14,4 +14,12 @@
         android:icon="@drawable/ic_filter"
         app:showAsAction="ifRoom">
     </item>
+    <item android:id="@+id/reloadAllArticles"
+        android:orderInCategory="3"
+        android:title="Refesh all articles"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="always">
+
+    </item>
+
 </menu>

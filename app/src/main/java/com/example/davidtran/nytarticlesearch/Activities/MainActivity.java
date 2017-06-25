@@ -67,13 +67,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.frag_container, Articlefragment).commit();
 
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.mainmenu, menu);
-        MenuItem itemSearch = menu.findItem(R.id.action_search);
+    private void SearchViewListener(MenuItem itemSearch){
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(itemSearch);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -89,10 +83,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                loadingBar.setVisibility(View.VISIBLE);
+                //loadingBar.setVisibility(View.VISIBLE);
                 return true;
             }
+
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mainmenu, menu);
+        MenuItem itemSearch = menu.findItem(R.id.action_search);
+
+        SearchViewListener(itemSearch);
         return true;
     }
 
@@ -108,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
                 showSearchFilter();
                 Toast.makeText(this, "filter clicked", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.reloadAllArticles:
+                loadArticles();
+                return true;
+
 
 
         }

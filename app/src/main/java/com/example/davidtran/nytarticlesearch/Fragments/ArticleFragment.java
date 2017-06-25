@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class ArticleFragment extends Fragment {
     List<Article> articleList;
     ArticleAdapter articleAdapter;
 
+
     @BindView(R.id.metroList_Acticle)
     RecyclerView rcArticleList;
     @BindView(R.id.loadingBar)
@@ -90,6 +92,7 @@ public class ArticleFragment extends Fragment {
         }
 
         fetchData(setUpSearchRequest(squery,searchFilter));
+
         setUpListener();
         return view;
     }

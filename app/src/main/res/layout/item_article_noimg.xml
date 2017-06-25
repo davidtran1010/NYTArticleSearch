@@ -5,8 +5,9 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardMaxElevation="6dp"
-    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp"
+    app:cardUseCompatPadding="true">
     >
 
     <LinearLayout
@@ -18,6 +19,11 @@
             android:id="@+id/article_snippet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@android:color/black"
             tools:text="In this example, the app style is set to the light Material Theme (Theme.Material.Light) so that the CardView shadows and edges are easier to see. For more information about theming Android 5.0 apps, see" />
     </LinearLayout>
 

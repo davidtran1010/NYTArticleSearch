@@ -2,6 +2,10 @@ package com.example.davidtran.nytarticlesearch.Adapters;
 
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.Log;
@@ -16,7 +20,9 @@ import com.example.davidtran.nytarticlesearch.Models.Article;
 import com.example.davidtran.nytarticlesearch.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +37,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     static int NORMAL = 1;
     static int NOIMG = 0;
 
+
     public ArticleAdapter(List<Article> articleList, Context context) {
         this.articleList = new ArrayList<Article>();
         this.articleList = articleList;
@@ -40,12 +47,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if(viewType == NORMAL) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_article,parent,false);
+
+        if (viewType == NORMAL) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_article, parent, false);
             return new normalViewHolder(view);
-        }
-        else  {
-            view = LayoutInflater.from(context).inflate(R.layout.item_article_noimg,parent,false);
+        } else {
+            view = LayoutInflater.from(context).inflate(R.layout.item_article_noimg, parent, false);
             return new noImgViewHolder(view);
         }
 
@@ -56,33 +63,76 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Article article = articleList.get(position);
 
-        if (holder instanceof normalViewHolder){
-            bindWithNormalImg((normalViewHolder) holder,article);
-        }
-        else if(holder instanceof noImgViewHolder){
-            bindWithNoImg((noImgViewHolder) holder,article);
+        if (holder instanceof normalViewHolder) {
+            bindWithNormalImg((normalViewHolder) holder, article);
+        } else if (holder instanceof noImgViewHolder) {
+            bindWithNoImg((noImgViewHolder) holder, article);
         }
 
 
     }
-    private void bindWithNormalImg(normalViewHolder holder, Article article){
+
+    private void bindWithNormalImg(normalViewHolder holder, Article article) {
+        int radomColor = ranDomColor();
+        int[] rainbow = context.getResources().getIntArray(R.array.colorArray);
+       /* int[] lightColorArray = new int[5];
+        lightColorArray[0] = rainbow[3];
+        lightColorArray[1] = rainbow[4];
+        lightColorArray[2] = rainbow[5];
+        lightColorArray[3] = rainbow[6];
+        lightColorArray[4] = rainbow[7];*/
+
 
         holder.article_snippet.setText(article.getSnipet());
+        holder.article_snippet.setBackgroundColor(radomColor);
+
+       /* if(Arrays.binarySearch(lightColorArray,radomColor)>=0){
+            holder.article_snippet.setTextColor(Color.BLACK);
+        }*/
+
+        Article.Media media = article.getMultimedia().get(0);
+        int realWidth = media.getWidth();
+        int realHeight = media.getHeight();
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
+        int height = width * realHeight / realWidth;
+        media.setWidth(width);
+        media.setHeight(height);
         Glide.with(context)
-                .load(article.getMultimedia().get(0).getUrl())
+                .load(media.getUrl())
                 .into(holder.article_image);
     }
-    private void bindWithNoImg(noImgViewHolder holder, Article article){
-        Log.i("My log:",article.getSnipet());
+
+    private void bindWithNoImg(noImgViewHolder holder, Article article) {
+        Log.i("My log:", article.getSnipet());
+        int radomColor = ranDomColor();
+        int[] rainbow = context.getResources().getIntArray(R.array.colorArray);
+        /*int[] lightColorArray = new int[5];
+        lightColorArray[0] = rainbow[3];
+        lightColorArray[1] = rainbow[4];
+        lightColorArray[2] = rainbow[5];
+        lightColorArray[3] = rainbow[6];
+        lightColorArray[4] = rainbow[7];*/
+
         holder.article_snippet.setText(article.getSnipet());
+        holder.article_snippet.setBackgroundColor(radomColor);
+/*
+        if(Arrays.binarySearch(lightColorArray,radomColor)>=0){
+            holder.article_snippet.setTextColor(Color.BLACK);
+        }*/
 
     }
 
+    private int ranDomColor() {
+        int[] rainbow = context.getResources().getIntArray(R.array.colorArray);
+        Random randomGenerator = new Random();
+        int randomNumber = 0 + randomGenerator.nextInt(11 - 0);
+        return rainbow[randomNumber];
+    }
 
     @Override
     public int getItemViewType(int position) {
         if (hasNoImage(position) == true)
-                return NOIMG;
+            return NOIMG;
         return NORMAL;
     }
 
@@ -90,27 +140,33 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return articleList.size();
     }
-    private boolean hasNoImage(int position){
+
+    private boolean hasNoImage(int position) {
         return articleList.get(position).getMultimedia().isEmpty();
     }
-    static class noImgViewHolder extends RecyclerView.ViewHolder{
+
+    static class noImgViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.article_snippet)
         TextView article_snippet;
 
         public noImgViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
-     static class normalViewHolder extends RecyclerView.ViewHolder{
+
+    static class normalViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.article_image)
         ImageView article_image;
         @BindView(R.id.article_snippet)
         TextView article_snippet;
 
+
         public normalViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
+
+
         }
     }
 }

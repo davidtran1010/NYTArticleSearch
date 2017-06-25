@@ -39,12 +39,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
         if(viewType == NORMAL) {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_article,parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_article,parent,false);
             return new normalViewHolder(view);
         }
         else  {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_article_noimg,parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.item_article_noimg,parent,false);
             return new noImgViewHolder(view);
         }
 

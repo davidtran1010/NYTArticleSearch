@@ -1,6 +1,7 @@
 package com.example.davidtran.nytarticlesearch.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.davidtran.nytarticlesearch.Activities.WebViewActivity;
 import com.example.davidtran.nytarticlesearch.Adapters.ArticleAdapter;
 import com.example.davidtran.nytarticlesearch.Models.Article;
+import com.example.davidtran.nytarticlesearch.Models.RecyclerItemClickListener;
 import com.example.davidtran.nytarticlesearch.Models.SearchArticleResult;
 import com.example.davidtran.nytarticlesearch.Models.SearchFilter;
 import com.example.davidtran.nytarticlesearch.Models.SearchRequest;
@@ -59,9 +62,11 @@ public class ArticleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_articles, container, false);
+
         ButterKnife.bind(this, view);
         articleList = new ArrayList<Article>();
         String squery = "";
+
         try {
             squery = getArguments().getString("query");
             Log.i("My log: query:",squery);
@@ -84,12 +89,26 @@ public class ArticleFragment extends Fragment {
                     ": sports:" + searchFilter.getHasSport()+" : arts:"+searchFilter.getHasArt() + ": fashion:" + searchFilter.getHasFashion());
         }
 
-        Log.i("My log:", "tao fragment");
         fetchData(setUpSearchRequest(squery,searchFilter));
-
+        setUpListener();
         return view;
     }
+    private void setUpListener(){
+        rcArticleList.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Article article = articleList.get(position);
+                        viewArticleWeb(article.getWebUrl());
+                    }
+                })
+        );
+    }
+    private void viewArticleWeb(String url){
+        Intent intent = new Intent(getActivity(), WebViewActivity.class);
 
+        intent.putExtra("DetailWebViewUrl",url);
+        startActivity(intent);
+    }
     private void setUpAdapter(@Nullable List<Article> articleList) {
         if(articleList.size()==0){
             articleList.add(new Article());

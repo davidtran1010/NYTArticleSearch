@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +35,7 @@ import butterknife.ButterKnife;
 public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<Article> articleList;
     Context context;
+    static int LOADING = 2;
     static int NORMAL = 1;
     static int NOIMG = 0;
 
@@ -47,8 +49,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-
-        if (viewType == NORMAL) {
+        if(viewType == LOADING){
+            view  = LayoutInflater.from(context).inflate(R.layout.item_loading, parent, false);
+            return new loadingItemViewHolder(view);
+        }
+        else if (viewType == NORMAL) {
             view = LayoutInflater.from(context).inflate(R.layout.item_article, parent, false);
             return new normalViewHolder(view);
         } else {
@@ -68,27 +73,21 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if (holder instanceof noImgViewHolder) {
             bindWithNoImg((noImgViewHolder) holder, article);
         }
-
+        else if (holder instanceof loadingItemViewHolder) {
+            loadingItemViewHolder loadingViewHolder = (loadingItemViewHolder) holder;
+            loadingViewHolder.pbLoadingMore.setIndeterminate(true);
+        }
 
     }
 
     private void bindWithNormalImg(normalViewHolder holder, Article article) {
         int radomColor = ranDomColor();
         int[] rainbow = context.getResources().getIntArray(R.array.colorArray);
-       /* int[] lightColorArray = new int[5];
-        lightColorArray[0] = rainbow[3];
-        lightColorArray[1] = rainbow[4];
-        lightColorArray[2] = rainbow[5];
-        lightColorArray[3] = rainbow[6];
-        lightColorArray[4] = rainbow[7];*/
-
 
         holder.article_snippet.setText(article.getSnipet());
         holder.article_snippet.setBackgroundColor(radomColor);
 
-       /* if(Arrays.binarySearch(lightColorArray,radomColor)>=0){
-            holder.article_snippet.setTextColor(Color.BLACK);
-        }*/
+
 
         Article.Media media = article.getMultimedia().get(0);
         int realWidth = media.getWidth();
@@ -106,19 +105,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Log.i("My log:", article.getSnipet());
         int radomColor = ranDomColor();
         int[] rainbow = context.getResources().getIntArray(R.array.colorArray);
-        /*int[] lightColorArray = new int[5];
-        lightColorArray[0] = rainbow[3];
-        lightColorArray[1] = rainbow[4];
-        lightColorArray[2] = rainbow[5];
-        lightColorArray[3] = rainbow[6];
-        lightColorArray[4] = rainbow[7];*/
+
 
         holder.article_snippet.setText(article.getSnipet());
         holder.article_snippet.setBackgroundColor(radomColor);
-/*
-        if(Arrays.binarySearch(lightColorArray,radomColor)>=0){
-            holder.article_snippet.setTextColor(Color.BLACK);
-        }*/
 
     }
 
@@ -133,6 +123,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         if (hasNoImage(position) == true)
             return NOIMG;
+        if(isLoading(position) == true)
+            return LOADING;
         return NORMAL;
     }
 
@@ -144,7 +136,19 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean hasNoImage(int position) {
         return articleList.get(position).getMultimedia().isEmpty();
     }
+    private boolean isLoading(int position){
+        return articleList.get(position) == null;
+    }
 
+    static class loadingItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.pbLoadingMore)
+        ProgressBar pbLoadingMore;
+
+        public loadingItemViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
     static class noImgViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.article_snippet)
         TextView article_snippet;

@@ -33,14 +33,14 @@ public class MainActivity extends AppCompatActivity {
     SearchRequest searchRequest;
     SearchFilter searchFilter;
     String searchQuery = "";
-    @BindView(R.id.searchLoading)
-    ProgressBar loadingBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         loadArticles();
     }
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new ArticleFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frag_container, fragment).addToBackStack(null).commit();
-        loadingBar.setVisibility(View.GONE);
+
     }
 
     public void searchArticles(String query, SearchFilter searchFilter) {
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 searchQuery = query;
 
                 searchArticles(query, new SearchFilter());
-                loadingBar.setVisibility(View.GONE);
+
 
                 return true;
             }

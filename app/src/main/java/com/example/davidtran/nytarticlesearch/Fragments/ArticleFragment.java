@@ -56,12 +56,10 @@ public class ArticleFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     @BindView(R.id.metroList_Acticle)
     RecyclerView rcArticleList;
-    @BindView(R.id.loadingBar)
-    ProgressBar loadingBar;
+    @BindView(R.id.loadingBar) ProgressBar loadingBar;
     SearchFilter searchFilter;
     SearchRequest searchRequest;
-    @BindView(R.id.loadingMoreBar)
-    ProgressBar loadingMoreBar;
+
 
     @Nullable
     @Override
@@ -69,6 +67,7 @@ public class ArticleFragment extends Fragment {
         View view = inflater.inflate(R.layout.frag_articles, container, false);
 
         ButterKnife.bind(this, view);
+
         articleList = new ArrayList<Article>();
         String squery = "";
 
@@ -102,20 +101,23 @@ public class ArticleFragment extends Fragment {
     }
 
     private void setUpScrollListener(StaggeredGridLayoutManager layoutManager) {
-        loadingMoreBar.setVisibility(View.VISIBLE);
+
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
 
                 loadNextDataFromApi(page);
                 final int curSize = articleAdapter.getItemCount();
+               // articleList.add(null);
+               // articleAdapter.notifyItemRangeInserted(curSize, articleList.size() - 1);
+
                 // articleList.addAll(moreArticles);
 
                 view.post(new Runnable() {
                     @Override
                     public void run() {
                         articleAdapter.notifyItemRangeInserted(curSize, articleList.size() - 1);
-                        loadingMoreBar.setVisibility(View.GONE);
+                        //loadingMoreBar.setVisibility(View.GONE);
                     }
                 });
             }
@@ -225,8 +227,9 @@ public class ArticleFragment extends Fragment {
                     Toast.makeText(getActivity(), "Your searching not found! \nAll article will be reloaded", Toast.LENGTH_LONG);
                     reFeshFragment();
                 }
-
                 loadingBar.setVisibility(View.GONE);
+
+
 
 
             }
@@ -240,11 +243,11 @@ public class ArticleFragment extends Fragment {
     }
 
     private void reFeshFragment() {
-        loadingBar.setVisibility(View.VISIBLE);
+
         Fragment fragment = new ArticleFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frag_container, fragment).addToBackStack(null).commit();
-        loadingBar.setVisibility(View.GONE);
+
     }
 
 

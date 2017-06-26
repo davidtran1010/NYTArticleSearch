@@ -50,7 +50,7 @@ public class WebViewActivity extends Activity {
         setContentView(R.layout.activity_webview);
         ButterKnife.bind(this);
         final String url = getIntent().getStringExtra("DetailWebViewUrl");
-       
+
         setUpWebView(url);
 
 

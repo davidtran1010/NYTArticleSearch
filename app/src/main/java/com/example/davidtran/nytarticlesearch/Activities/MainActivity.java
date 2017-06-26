@@ -1,6 +1,9 @@
 package com.example.davidtran.nytarticlesearch.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -38,10 +41,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        loadArticles();
+        if(isNetworkAvailable()) {
+            loadArticles();
+        }else{
+            Toast.makeText(this,"Please check your Internet and touch reload",Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+    private Boolean isNetworkAvailable() {
+
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+
     }
 
     private void loadArticles() {

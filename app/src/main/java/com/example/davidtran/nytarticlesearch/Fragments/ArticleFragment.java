@@ -1,7 +1,10 @@
 package com.example.davidtran.nytarticlesearch.Fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -56,7 +59,8 @@ public class ArticleFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     @BindView(R.id.metroList_Acticle)
     RecyclerView rcArticleList;
-    @BindView(R.id.loadingBar) ProgressBar loadingBar;
+    @BindView(R.id.loadingBar)
+    ProgressBar loadingBar;
     SearchFilter searchFilter;
     SearchRequest searchRequest;
 
@@ -94,11 +98,15 @@ public class ArticleFragment extends Fragment {
         }
 
         searchRequest = setUpSearchRequest(squery, searchFilter);
+
+
         fetchData();
         setUpListener();
 
+
         return view;
     }
+
 
     private void setUpScrollListener(StaggeredGridLayoutManager layoutManager) {
 
@@ -108,8 +116,8 @@ public class ArticleFragment extends Fragment {
 
                 loadNextDataFromApi(page);
                 final int curSize = articleAdapter.getItemCount();
-               // articleList.add(null);
-               // articleAdapter.notifyItemRangeInserted(curSize, articleList.size() - 1);
+                // articleList.add(null);
+                // articleAdapter.notifyItemRangeInserted(curSize, articleList.size() - 1);
 
                 // articleList.addAll(moreArticles);
 
@@ -228,8 +236,6 @@ public class ArticleFragment extends Fragment {
                     reFeshFragment();
                 }
                 loadingBar.setVisibility(View.GONE);
-
-
 
 
             }

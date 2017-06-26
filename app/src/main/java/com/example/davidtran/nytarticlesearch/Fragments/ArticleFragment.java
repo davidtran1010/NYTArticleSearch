@@ -61,6 +61,7 @@ public class ArticleFragment extends Fragment {
     RecyclerView rcArticleList;
     @BindView(R.id.loadingBar)
     ProgressBar loadingBar;
+    @BindView(R.id.loadingMoreBar) ProgressBar loadingMoreBar;
     SearchFilter searchFilter;
     SearchRequest searchRequest;
 
@@ -113,7 +114,7 @@ public class ArticleFragment extends Fragment {
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
+                loadingMoreBar.setVisibility(View.VISIBLE);
                 loadNextDataFromApi(page);
                 final int curSize = articleAdapter.getItemCount();
                 // articleList.add(null);
@@ -125,7 +126,7 @@ public class ArticleFragment extends Fragment {
                     @Override
                     public void run() {
                         articleAdapter.notifyItemRangeInserted(curSize, articleList.size() - 1);
-                        //loadingMoreBar.setVisibility(View.GONE);
+                        loadingMoreBar.setVisibility(View.GONE);
                     }
                 });
             }

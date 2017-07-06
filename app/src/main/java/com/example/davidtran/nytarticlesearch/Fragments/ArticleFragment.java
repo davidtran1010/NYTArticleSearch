@@ -186,6 +186,7 @@ public class ArticleFragment extends Fragment {
         }
         articleAdapter = new ArticleAdapter(articleList, getContext());
         rcArticleList.setAdapter(articleAdapter);
+
         layoutManager = new StaggeredGridLayoutManager(2, VERTICAL);
         rcArticleList.setLayoutManager(layoutManager);
 

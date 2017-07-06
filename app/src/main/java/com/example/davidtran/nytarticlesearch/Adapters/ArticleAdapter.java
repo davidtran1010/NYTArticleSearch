@@ -94,8 +94,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         int realHeight = media.getHeight();
         int width = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
         int height = width * realHeight / realWidth;
-        media.setWidth(width);
-        media.setHeight(height);
+        ViewGroup.LayoutParams layoutParams = holder.article_image.getLayoutParams();
+        layoutParams.height = height;
+        layoutParams.width = width;
+
+
         Glide.with(context)
                 .load(media.getUrl())
                 .into(holder.article_image);
